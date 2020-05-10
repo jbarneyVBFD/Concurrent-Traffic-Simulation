@@ -35,12 +35,12 @@ void TrafficLight::waitForGreen()
     // runs and repeatedly calls the receive function on the message queue. 
     // Once it receives TrafficLightPhase::green, the method returns.
 }
-
+*/
 TrafficLightPhase TrafficLight::getCurrentPhase()
 {
     return _currentPhase;
 }
-
+/*
 void TrafficLight::simulate()
 {
     // FP.2b : Finally, the private method „cycleThroughPhases“ should be started in a thread when the public method „simulate“ is called. To do this, use the thread queue in the base class. 
@@ -56,7 +56,37 @@ void TrafficLight::cycleThroughPhases()
 
     while(true)
     {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        //auto start = std::chrono::high_resolution_clock::now();
         
+        if (_currentPhase == red) { 
+            auto start = std::chrono::high_resolution_clock::now();
+            _currentPhase = green; 
+            _msgs.send(std::move(getCurrentPhase()));
+            int random = rand() % 6 + 4;
+            while(true) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                auto end = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double> duration = end - start;   
+                if(duration.count() > random) { break; } 
+            }
+
+            }
+        else { 
+            auto start = std::chrono::high_resolution_clock::now();
+            _currentPhase = red; 
+            _currentPhase = green;
+            _msgs.send(std::move(getCurrentPhase()));
+            int random = rand() % 6 + 4;
+            while(true) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                auto end = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double> duration = end - start;   
+                if(duration.count() > random) { break; } 
+            }
+            }
+
+
     }
 }
 
